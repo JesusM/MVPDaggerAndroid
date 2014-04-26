@@ -1,0 +1,33 @@
+apply plugin: 'android'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.0.3"
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 19
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile parent.ext.libraries.dagger
+    provided parent.ext.libraries.dagger_compiler
+    compile parent.ext.libraries.appcompat
+    compile parent.ext.libraries.supportv4
+    compile parent.ext.libraries.supportv13
+    compile parent.ext.libraries.butterknife
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile project(":core")
+
+
+}

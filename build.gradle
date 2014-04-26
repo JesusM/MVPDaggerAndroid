@@ -1,0 +1,57 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.9.1'
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+ext {
+    versionMajor = 0
+    versionMinor = 1
+    versionPatch = 0
+
+    versionCode = versionMajor * 1000 + versionMinor * 100 + versionPatch
+    versionName = versionMajor + "." + versionMinor + "." + versionPatch
+
+    minSdkVersion = 15
+    targetSdkVersion = 19
+    compileSdkVersion = 19
+    buildToolsVersion = '19.0.3'
+}
+
+ext.libraries = [
+        dagger         : 'com.squareup.dagger:dagger:1.2.+',
+        dagger_compiler: 'com.squareup.dagger:dagger-compiler:1.2.+',
+        appcompat      : 'com.android.support:appcompat-v7:+',
+        supportv4      : 'com.android.support:support-v4:19.1.+',
+        supportv13      : 'com.android.support:support-v13:19.1.+',
+        butterknife    : 'com.jakewharton:butterknife:5.0.+'
+
+]
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
+}
+
+
+project.ext.preDexLibs = project.hasProperty('disablePreDex')
+
+subprojects {
+    project.plugins.whenPluginAdded { plugin ->
+        if ("com.android.build.gradle.AppPlugin".equals(plugin.class.name)) {
+            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
+        } else if ("com.android.build.gradle.LibraryPlugin".equals(plugin.class.name)) {
+            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
+        }
+    }
+}
